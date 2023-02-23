@@ -31,7 +31,7 @@ DEVICE_IP=${ip}`
         }
 
         if (stderr) {
-          log("setup() error:", stdout);
+          log("setup() error:", stderr);
         }
 
         resolve();
