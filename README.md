@@ -23,6 +23,7 @@ these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
   $ npm i --location=global pm2 yarn
   ```
 - clone this repo & install dependenceies with `yarn`
+- give execute permission to /setup/get-ip.sh
 - start node server (using `pm2`)
   ```
   $ yarn start
@@ -34,7 +35,7 @@ these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
   $ pm2 save
   ```
 - customizations done! now generate the iso
-- preseed config for automatic user setup (r&d in progress)
+- [preseed](https://en.wikipedia.org/wiki/Preseed) config for automatic user setup (r&d in progress)
 
   ```
   # Preseed user account

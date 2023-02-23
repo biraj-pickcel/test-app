@@ -1,6 +1,7 @@
 import { exec } from "child_process";
 import fs from "node:fs/promises";
 import dotenv from "dotenv";
+import log from "../util/log.js";
 import toEnv from "../util/toEnv.js";
 
 export default function setup() {
@@ -30,7 +31,7 @@ DEVICE_IP=${ip}`
         }
 
         if (stderr) {
-          console.log("error:", stdout);
+          log("setup() error:", stdout);
         }
 
         resolve();

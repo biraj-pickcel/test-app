@@ -4,6 +4,7 @@ import path from "node:path";
 import dotenv from "dotenv";
 import express from "express";
 import setup from "./setup/setup.js";
+import log from "./util/log.js";
 import toEnv from "./util/toEnv.js";
 
 const app = express();
@@ -24,16 +25,16 @@ app.post("/admin/config", async (req, res) => {
   res.json("{data: '.env file updated! server restarting'}");
   exec("pm2 reload all", (err, stdout, stderr) => {
     if (err) {
-      console.log(err);
+      log(err);
       return;
     }
 
     if (stdout) {
-      console.log(stdout);
+      log(stdout);
     }
 
     if (stderr) {
-      console.log(stderr);
+      log(stderr);
     }
   });
 });
@@ -53,8 +54,8 @@ try {
   await setup();
   dotenv.config({ override: true });
   const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => console.log(`server running on port ${PORT}...`));
+  app.listen(PORT, () => log(`server running on port ${PORT}...`));
 } catch (err) {
-  console.error("error(s) occured during setup");
-  console.error(err.message.trim());
+  log("error(s) occured during setup");
+  log(err.message.trim());
 }
