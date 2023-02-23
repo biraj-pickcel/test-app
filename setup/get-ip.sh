@@ -1,14 +1,19 @@
 #!/bin/bash
-ifconfig wlo1 >/dev/null 2>&1
-found_wl01=$?
-if (("$found_wl01" != 0)); then
-    >&2 echo "wl01 not found"
-    exit 1
+interface="wlo1"
+ifconfig "$interface" >/dev/null 2>&1
+if (("$?" != 0)); then
+    >&2 echo "$interface not found! trying wlp3s0..."
+    interface="wlp3s0"
+    ifconfig "$interface" >/dev/null 2>&1
+    if (("$?" != 0)); then
+        >&2 echo "wlp3s0 also not found..."
+        exit 1
+    fi
 fi
 
-ip=$(ifconfig wlo1 | grep -oP "inet \K([0-9.]+)")
+ip=$(ifconfig "$interface" | grep -oP "inet \K([0-9.]+)")
 if [[ "$ip" == "" ]]; then
-    >&2 echo "not connected to a network"
+    >&2 echo "not connected to a network (interface $interface)"
     exit 1
 fi
 
