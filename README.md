@@ -2,7 +2,7 @@
 
 these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
 
-- download the Ubuntu Server 20.04 LTS iso
+- download the Ubuntu Server **20.04** iso
 - install Cubic (Custom Ubuntu ISO Creator)
 - create a cubic project, choose iso, set names & stuff
 - we will get a chroot terminal (basically a terminal to do stuff in our iso & then generating a custom one)
@@ -26,8 +26,11 @@ these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
   ```
   $ npm i --location=global pm2 yarn
   ```
-- clone this repo & install dependenceies with `yarn`
-- give execute permission to /setup/get-ip.sh
+- clone this repo, `cd` in it & install dependenceies with `yarn`
+- give execute permission to `/setup/get-ip.sh` (here `/` refers to this repo)
+  ```
+  chmod 744 setup/get-ip.sh
+  ```
 - start node server (using `pm2`)
   ```
   $ yarn start
