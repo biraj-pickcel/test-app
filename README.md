@@ -27,10 +27,6 @@ these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
   $ npm i --location=global pm2 yarn
   ```
 - clone this repo, `cd` in it & install dependenceies with `yarn`
-- give execute permission to `/setup/get-ip.sh` (here `/` refers to this repo)
-  ```
-  chmod 744 setup/get-ip.sh
-  ```
 - start node server (using `pm2`)
   ```
   $ yarn start
@@ -62,4 +58,4 @@ these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
   ./ubuntu-autoinstall-generator.sh -a -e -u <user-data-file> -k -s <iso>
   ```
 
-  _note: i expected it to ask for other things like keyboard, langauge & stuff but it just used default. so need to learn more about clout-init & it's config so that it asks the user of stuff which i didn't configure in the iso._
+  _note: i expected it to ask for other things like keyboard, langauge & stuff but it just used default. so need to learn more about clout-init & its config so that it asks the user of stuff which i didn't configure in the iso._
