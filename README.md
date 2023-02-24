@@ -3,10 +3,10 @@
 these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
 
 - download the Ubuntu Server **20.04** iso
-- install Cubic (Custom Ubuntu ISO Creator)
-- create a cubic project, choose iso, set names & stuff
+- install [Cubic](https://github.com/PJ-Singh-001/Cubic) (Custom Ubuntu ISO Creator)
+- create a cubic project, choose iso then set name, version & stuff
 - we will get a chroot terminal (basically a terminal to do stuff in our iso & then generating a custom one)
-- install `ifconfig`
+- install `ifconfig` (in that choort terminal)
   ```
   apt install net-tools
   ```
