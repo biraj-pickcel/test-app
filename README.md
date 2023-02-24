@@ -37,8 +37,8 @@ these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
   # <run the command echoed by `pm2 startup` by switching as root>
   $ pm2 save
   ```
-- customizations done! now generate the iso & close chroot
-- now install `cloud-init` (in your pc, not in chroot)
+- customizations done! now generate the iso & close Cubic
+- now install `cloud-init` (again in your pc, not in chroot)
   ```
   $ sudo apt install cloud-init
   ```
