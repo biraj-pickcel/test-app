@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import dotenv from "dotenv";
 import express from "express";
-import mongoose from "mongoose";
+import { default as mongoose, Schema } from "mongoose";
 import setup from "./setup/setup.js";
 import log from "./util/log.js";
 import toEnv from "./util/toEnv.js";
@@ -51,11 +51,27 @@ app.get("/api/test", (req, res) => {
   res.json({ data: "test successful\n", variables: [process.env.DEVICE_IP, process.env.ABC, process.env.XYZ] });
 });
 
+app.get("/api/users", async (req, res, next) => {
+  try {
+    const Users = mongoose.model("users", new Schema({ name: String }));
+    const users = await Users.find({}, { _id: 0 });
+    res.json({ data: users });
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: "internal server error" });
+});
+
 try {
   await setup();
   dotenv.config({ override: true });
 
-  await mongoose.connect(`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`);
+  const { DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_NAME } = process.env;
+  await mongoose.connect(`mongodb://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}`);
   log("connected with mongo");
 
   const PORT = process.env.PORT || 3000;
