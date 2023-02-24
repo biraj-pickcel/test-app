@@ -41,22 +41,25 @@ these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
   # <run the command echoed by `pm2 startup` by switching as root>
   $ pm2 save
   ```
-- customizations done! now generate the iso
-- [preseed](https://en.wikipedia.org/wiki/Preseed) config for automatic user setup (r&d in progress)
+- customizations done! now generate the iso & close chroot
+- now install `cloud-init` (in your pc, not in chroot)
+  ```
+  $ sudo apt install cloud-init
+  ```
+- then create a config file _user-data_ with the following (for default account creation):
+  ```
+  #cloud-config
+  autoinstall:
+    version: 1
+    identity:
+      hostname: hostname
+      password: "a crypted password generated with mkpasswd"
+      username: username
+  ```
+- then generate a new iso with this config using [ubuntu-autoinstall-generator](https://github.com/covertsh/ubuntu-autoinstall-generator)
 
   ```
-  # Preseed user account
-  d-i auto-install/enable boolean true
-  d-i passwd/user-fullname string Full Name
-  d-i passwd/username string username
-  d-i passwd/user-password password username
-  d-i passwd/user-password-again password username
-  d-i user-setup/allow-password-weak boolean true
-  d-i user-setup/encrypt-home boolean false
-  d-i user-setup/override-home boolean true
-  d-i user-setup/encrypt-home boolean false
-  d-i clock-setup/utc boolean true
-  d-i time/zone string Asia/Kolkata
+  ./ubuntu-autoinstall-generator.sh -a -e -u <user-data-file> -k -s <iso>
   ```
 
-  _note: for listing values for time/zone, use `cat /usr/share/zoneinfo/zone.tab`_
+  _note: i expected it to ask for other things like keyboard, langauge & stuff but it just used default. so need to learn more about clout-init & it's config so that it asks the user of stuff which i didn't configure in the iso._
