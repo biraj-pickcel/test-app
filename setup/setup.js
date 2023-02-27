@@ -29,15 +29,8 @@ export default function setup() {
           env["DEVICE_IP"] = ip;
           await toEnv(env);
         } else {
-          await fs.writeFile(
-            ".env",
-            `DB_HOST=...
-DB_PORT=...
-DB_NAME=...
-DB_USER=...
-DB_PASS=...
-DEVICE_IP=${ip}`
-          );
+          log("a .env file is required for setup");
+          process.exit(1);
         }
 
         if (stderr) {

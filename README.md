@@ -6,20 +6,23 @@ these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
 - install [Cubic](https://github.com/PJ-Singh-001/Cubic) (Custom Ubuntu ISO Creator)
 - create a cubic project, choose iso then set name, version & stuff
 - we will get a chroot terminal (basically a terminal to do stuff in our iso & then generating a custom one)
-- install `ifconfig` (in that choort terminal)
+- install `ifconfig` (in that chroot terminal)
   ```
   apt install net-tools
   ```
 - create a new user:
   ```
   # adduser <newuser>
-  # usermod -aG sudo <newuser>  // add user to sudo group if you want to (i didn't btw)
+  # usermod -aG sudo <newuser>  // add user to sudo group if you want to (don't forget remove it later)
   ```
 - switch to new user with `su <newuser>`
 - install [nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
-  _note: this gave me an error_ **Failed to connect to raw.githubusercontent.com port 443: Connection refused**
-  which i fixed it by adding `185.199.108.133 raw.githubusercontent.com` to `/etc/hosts` file ([source](https://www.debugpoint.com/failed-connect-raw-githubusercontent-com-port-443/#:~:text=Fix%201%3A%20Updating%20the%20%2Fetc%2Fhosts%20file%20in%20Linux,-If%20you%20are&text=Open%20the%20%2Fetc%2Fhosts%20file.&text=Then%20at%20the%20end%20of%20this%20file%2C%20add%20the%20IP%20address.&text=Save%20and%20close%20the%20file,again%2C%20and%20it%20should%20work.))
+  _note: this gave me an error_ **Failed to connect to raw.githubusercontent.com port 443: Connection refused** which i fixed it by adding `185.199.108.133 raw.githubusercontent.com` to `/etc/hosts` file ([source](https://www.debugpoint.com/failed-connect-raw-githubusercontent-com-port-443/#:~:text=Fix%201%3A%20Updating%20the%20%2Fetc%2Fhosts%20file%20in%20Linux,-If%20you%20are&text=Open%20the%20%2Fetc%2Fhosts%20file.&text=Then%20at%20the%20end%20of%20this%20file%2C%20add%20the%20IP%20address.&text=Save%20and%20close%20the%20file,again%2C%20and%20it%20should%20work.))
+
+- install mongodb following [their docs](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/)
+
+  _note: during one steps, this gave me an error **sudo: unable to resolve host cubic: Temporary failure in name resolution**_ which i fixed by adding `127.0.1.1 cubic` to `/etc/hosts` file ([source](https://askubuntu.com/questions/59458/error-message-sudo-unable-to-resolve-host-none))
 
 - install node (v16.16.0 in my case) with nvm (don't forget to restart session before using nvm)
 - then globally install `pm2` & `yarn` (i like yarn)

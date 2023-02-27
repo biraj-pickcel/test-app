@@ -1,0 +1,9 @@
+[Unit]
+Description=this script is meant to setup mongodb user on first install
+
+[Service]
+Type=oneshot
+ExecStart=/home/client/.nvm/versions/node/v16.16.0/bin/node /home/client/test-app/setup/mongo/user.js
+
+[Install]
+WantedBy=multi-user.target
