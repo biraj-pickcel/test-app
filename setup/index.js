@@ -1,6 +1,7 @@
 import { exec } from "child_process";
 import fs from "node:fs/promises";
 import dotenv from "dotenv";
+import mongoSetup from "./mongo.js";
 import log from "../util/log.js";
 import toEnv from "../util/toEnv.js";
 
@@ -25,6 +26,7 @@ export default function setup() {
         const ip = ips.length > 1 ? ips.find((ip) => ip.startsWith("192.168.")) : ips[0];
 
         if ((await fs.readdir("./")).includes(".env")) {
+          await mongoSetup();
           const env = dotenv.parse(await fs.readFile(".env", "utf-8"));
           env["DEVICE_IP"] = ip;
           await toEnv(env);

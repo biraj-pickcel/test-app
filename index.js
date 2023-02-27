@@ -4,7 +4,7 @@ import path from "node:path";
 import dotenv from "dotenv";
 import express from "express";
 import { default as mongoose, Schema } from "mongoose";
-import setup from "./setup/setup.js";
+import setup from "./setup/index.js";
 import log from "./util/log.js";
 import toEnv from "./util/toEnv.js";
 
@@ -43,12 +43,12 @@ app.post("/admin/config", async (req, res) => {
 app.get("/", (req, res) => {
   res.json({
     data: "biraj's server is working\n",
-    variables: [process.env.DEVICE_IP, process.env.ABC, process.env.XYZ],
+    variables: [process.env.DEVICE_IP, process.env.DB_USER],
   });
 });
 
 app.get("/api/test", (req, res) => {
-  res.json({ data: "test successful\n", variables: [process.env.DEVICE_IP, process.env.ABC, process.env.XYZ] });
+  res.json({ data: "test successful\n", variables: [process.env.DEVICE_IP] });
 });
 
 app.get("/api/users", async (req, res, next) => {

@@ -62,3 +62,9 @@ these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
   ```
 
   _note: i expected it to ask for other things like keyboard, langauge & stuff but it just used default. so need to learn more about clout-init & its config so that it asks the user of stuff which i didn't configure in the iso._
+
+```
+sudo su -c "env PATH=$PATH:/home/biraj21/.nvm/versions/node/v16.16.0/bin pm2 start index.js --name=test-app"
+sudo su -c "env PATH=$PATH:/home/biraj21/.nvm/versions/node/v16.16.0/bin pm2 startup"
+sudo su -c "env PATH=$PATH:/home/biraj21/.nvm/versions/node/v16.16.0/bin pm2 save"
+```
