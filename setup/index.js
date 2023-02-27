@@ -23,7 +23,10 @@ export default function setup() {
           .map((ip) => ip.trim());
 
         // assuming that we'll always get at least 1 ip
-        const ip = ips.length > 1 ? ips.find((ip) => ip.startsWith("192.168.")) : ips[0];
+        let ip = ips.length > 1 ? ips.find((ip) => ip.startsWith("192.168.")) : ips[0];
+        if (!ip) {
+          ip = "127.0.0.1";
+        }
 
         if ((await fs.readdir("./")).includes(".env")) {
           await mongoSetup();

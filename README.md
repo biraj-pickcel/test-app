@@ -13,9 +13,12 @@ these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
 - create a new user:
   ```
   # adduser <newuser>
-  # usermod -aG sudo <newuser>  // add user to sudo group if you want to (don't forget remove it later)
+  # usermod -aG sudo <newuser>  // add user to sudo group (don't forget remove it later)
   ```
-- switch to new user with `su <newuser>`
+- switch to new user with
+  ```
+  # su <newuser>`
+  ```
 - install [nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
   _note: this gave me an error_ **Failed to connect to raw.githubusercontent.com port 443: Connection refused** which i fixed it by adding `185.199.108.133 raw.githubusercontent.com` to `/etc/hosts` file ([source](https://www.debugpoint.com/failed-connect-raw-githubusercontent-com-port-443/#:~:text=Fix%201%3A%20Updating%20the%20%2Fetc%2Fhosts%20file%20in%20Linux,-If%20you%20are&text=Open%20the%20%2Fetc%2Fhosts%20file.&text=Then%20at%20the%20end%20of%20this%20file%2C%20add%20the%20IP%20address.&text=Save%20and%20close%20the%20file,again%2C%20and%20it%20should%20work.))
@@ -24,7 +27,15 @@ these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
 
   _note: during one step, this gave me an error **sudo: unable to resolve host cubic: Temporary failure in name resolution**_ which i fixed by adding `127.0.1.1 cubic` to `/etc/hosts` file ([source](https://askubuntu.com/questions/59458/error-message-sudo-unable-to-resolve-host-none))
 
+- enable mongodb so that it starts on boot
+  ```
+  $ sudo systemctl enable mongod.service
+  ```
 - install node (v16.16.0 in my case) with nvm (don't forget to restart session before using nvm)
+  ```
+  $ nvm install 16.16.0
+  $ node -v
+  ```
 - then globally install `pm2` & `yarn` (i like yarn)
   ```
   $ npm i --location=global pm2 yarn
