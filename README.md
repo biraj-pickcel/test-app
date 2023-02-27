@@ -8,7 +8,7 @@ these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
 - we will get a chroot terminal (basically a terminal to do stuff in our iso & then generating a custom one)
 - install `ifconfig` (in that chroot terminal)
   ```
-  apt install net-tools
+  # apt install net-tools
   ```
 - create a new user:
   ```
@@ -22,7 +22,7 @@ these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
 
 - install mongodb following [their docs](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/)
 
-  _note: during one steps, this gave me an error **sudo: unable to resolve host cubic: Temporary failure in name resolution**_ which i fixed by adding `127.0.1.1 cubic` to `/etc/hosts` file ([source](https://askubuntu.com/questions/59458/error-message-sudo-unable-to-resolve-host-none))
+  _note: during one step, this gave me an error **sudo: unable to resolve host cubic: Temporary failure in name resolution**_ which i fixed by adding `127.0.1.1 cubic` to `/etc/hosts` file ([source](https://askubuntu.com/questions/59458/error-message-sudo-unable-to-resolve-host-none))
 
 - install node (v16.16.0 in my case) with nvm (don't forget to restart session before using nvm)
 - then globally install `pm2` & `yarn` (i like yarn)
@@ -30,15 +30,36 @@ these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
   $ npm i --location=global pm2 yarn
   ```
 - clone this repo, `cd` in it & install dependenceies with `yarn`
-- start node server (using `pm2`)
+- start node server (see example first)
+
   ```
-  $ yarn start
+  $ whereis node (to get the path of node's bin directory)
+  $ sudo su -c "env PATH=$PATH:<node-bin-full-path> pm2 start index.js --name=test-app
   ```
-- for autostart i followed [pm2's docs](https://pm2.keymetrics.io/docs/usage/startup/) & did the following:
+
+  Example:
+
   ```
-  $ pm2 startup
-  # <run the command echoed by `pm2 startup` by switching as root>
-  $ pm2 save
+  $ sudo su -c "env PATH=$PATH:/home/biraj21/.nvm/versions/node/v16.16.0/bin pm2 start index.js --name=test-app"
+  ```
+
+- for autostart ([pm2's docs](https://pm2.keymetrics.io/docs/usage/startup/)):
+
+  ```
+  $ sudo su -c "env PATH=$PATH:<node-bin-full-path> pm2 startup"
+  $ sudo su -c "env PATH=$PATH:<node-bin-full-path> pm2 save"
+  ```
+
+  Example:
+
+  ```
+  $ sudo su -c "env PATH=$PATH:/home/biraj21/.nvm/versions/node/v16.16.0/bin pm2 startup"
+  $ sudo su -c "env PATH=$PATH:/home/biraj21/.nvm/versions/node/v16.16.0/bin pm2 save"
+  ```
+
+- remove sudo previliges from the user if given
+  ```
+  $ sudo deluser USERNAME sudo
   ```
 - customizations done! now generate the iso & close Cubic
 - now install `cloud-init` (again in your pc, not in chroot)
@@ -49,22 +70,14 @@ these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
   ```
   #cloud-config
   autoinstall:
-    version: 1
-    identity:
-      hostname: hostname
-      password: "a crypted password generated with mkpasswd"
-      username: username
+  version: 1
+  identity:
+  hostname: hostname
+  password: "a crypted password generated with mkpasswd"
+  username: username
   ```
 - then generate a new iso with this config using [ubuntu-autoinstall-generator](https://github.com/covertsh/ubuntu-autoinstall-generator)
-
   ```
-  ./ubuntu-autoinstall-generator.sh -a -e -u <user-data-file> -k -s <iso>
+  $ ./ubuntu-autoinstall-generator.sh -a -e -u <user-data-file> -k -s <iso>
   ```
-
   _note: i expected it to ask for other things like keyboard, langauge & stuff but it just used default. so need to learn more about clout-init & its config so that it asks the user of stuff which i didn't configure in the iso._
-
-```
-sudo su -c "env PATH=$PATH:/home/biraj21/.nvm/versions/node/v16.16.0/bin pm2 start index.js --name=test-app"
-sudo su -c "env PATH=$PATH:/home/biraj21/.nvm/versions/node/v16.16.0/bin pm2 startup"
-sudo su -c "env PATH=$PATH:/home/biraj21/.nvm/versions/node/v16.16.0/bin pm2 save"
-```
