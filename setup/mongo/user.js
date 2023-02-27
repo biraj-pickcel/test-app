@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { MongoClient } from "mongodb";
 
-dotenv.config({ path: "/home/client/test-app/" });
+dotenv.config({ path: "/home/client/test-app/.env" });
 const { DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_NAME } = process.env;
 
 console.log(DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_NAME);
