@@ -10,6 +10,10 @@ these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
   ```
   # apt install net-tools
   ```
+- install `network-manager` to setup wifi (maybe ethernet too ig, i just dk about that atm)
+  ```
+  # apt install network-manager
+  ```
 - create a new user:
   ```
   # adduser <newuser>
@@ -27,6 +31,17 @@ these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
 
   _note: during one step, this gave me an error **sudo: unable to resolve host cubic: Temporary failure in name resolution**_ which i fixed by adding `127.0.1.1 cubic` to `/etc/hosts` file ([source](https://askubuntu.com/questions/59458/error-message-sudo-unable-to-resolve-host-none))
 
+  ps: this error doesn't occur everytime though
+
+- to prevent unintended updates (from docs)
+  ```
+  $ echo "mongodb-org hold" | sudo dpkg --set-selections
+  $ echo "mongodb-org-database hold" | sudo dpkg --set-selections
+  $ echo "mongodb-org-server hold" | sudo dpkg --set-selections
+  $ echo "mongodb-mongosh hold" | sudo dpkg --set-selections
+  $ echo "mongodb-org-mongos hold" | sudo dpkg --set-selections
+  $ echo "mongodb-org-tools hold" | sudo dpkg --set-selections
+  ```
 - enable mongodb so that it starts on boot
   ```
   $ sudo systemctl enable mongod.service
@@ -68,6 +83,37 @@ these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
   $ sudo su -c "env PATH=$PATH:/home/biraj21/.nvm/versions/node/v16.16.0/bin pm2 save"
   ```
 
+- install nginx for reverse proxying & serving static files
+  ```
+  $ sudo apt install nginx
+  ```
+- save `/etc/nginx/nginx.conf` with the following config (better save the old config file as backup)
+
+  ```
+  events {
+
+  }
+
+  http {
+    server {
+      server_name test-app;
+
+      location ~ ^/(static/*) {
+        rewrite /static(.*) /$1 break;
+        root /home/client/test-app/static;
+      }
+
+      location ~ ^/(api/*) {
+        proxy_pass http://localhost:3000;
+      }
+
+      location / {
+        return 200 "hello from nginx!\n";
+      }
+    }
+  }
+  ```
+
 - remove sudo previliges from the user if given
   ```
   $ sudo deluser USERNAME sudo
@@ -88,7 +134,9 @@ these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
   username: username
   ```
 - then generate a new iso with this config using [ubuntu-autoinstall-generator](https://github.com/covertsh/ubuntu-autoinstall-generator)
+
   ```
   $ ./ubuntu-autoinstall-generator.sh -a -e -u <user-data-file> -k -s <iso>
   ```
+
   _note: i expected it to ask for other things like keyboard, langauge & stuff but it just used default. so need to learn more about clout-init & its config so that it asks the user of stuff which i didn't configure in the iso._
