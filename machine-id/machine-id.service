@@ -1,0 +1,9 @@
+[Unit]
+Description=a service that will fetch base board\'s serial number
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash <path-to-machine-id.h>
+
+[Install]
+WantedBy=multi-user.target
