@@ -21,7 +21,7 @@ these are the steps that i've followed to get a custom Ubuntu Server 20.04 LTS
   ```
 - switch to new user with
   ```
-  # su <newuser>`
+  # su <newuser>
   ```
 - install [nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 

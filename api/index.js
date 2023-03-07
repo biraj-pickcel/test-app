@@ -1,8 +1,8 @@
-import { exec } from "child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
 import express from "express";
 import { Schema } from "mongoose";
+import redisClient from "../util/redis.js";
 import toEnv from "../util/toEnv.js";
 
 const router = express.Router();
@@ -26,20 +26,20 @@ router.post("/admin/config", async (req, res) => {
 
   await toEnv(env);
   res.json("{data: '.env file updated! server restarting'}");
-  exec("pm2 reload all", (err, stdout, stderr) => {
-    if (err) {
-      log(err);
-      return;
+});
+
+router.get("/redis", async (req, res) => {
+  try {
+    const keys = await redisClient.keys();
+    const data = [];
+    for (const key of keys) {
+      data.push({ [key]: await redisClient.get(key) });
     }
 
-    if (stdout) {
-      log(stdout);
-    }
-
-    if (stderr) {
-      log(stderr);
-    }
-  });
+    res.json({ data });
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.get("/test", (req, res) => {
@@ -52,6 +52,7 @@ router.get("/users", async (req, res, next) => {
     const users = await Users.find({}, { _id: 0 });
     res.json({ data: users });
   } catch (err) {
+    log(err);
     next(err);
   }
 });
