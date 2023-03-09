@@ -1,5 +1,5 @@
 import { createClient } from "redis";
-import { log } from "../util/log.js";
+import log from "../util/log.js";
 
 const client = createClient();
 
